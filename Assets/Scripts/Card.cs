@@ -8,7 +8,6 @@ public class Card : MonoBehaviour
     public GameObject playedCards;
     public int speed = 1;
     public TextMeshProUGUI textComponent;
-    public GameObject canvasObj;
 
     AiOneCards aiCards;
     AiTwoCards aiTwoCards;
@@ -80,14 +79,6 @@ public class Card : MonoBehaviour
 
     public void OnMouseUpAsButton()
     {
-
-        if(cardManager.totalCards == 0)
-        {
-            textComponent.text = "You Have Won The Game";
-            drawPile.SetActive(false);
-            canvasObj.SetActive(true);
-        }
-
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (transform.name == "Wild" && cardManager.yourTurn)
         {

@@ -1,11 +1,15 @@
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
 
 public class CardManager : MonoBehaviour
 {
     public Sprite[] cardSprites;            // List of possible card sprites
     public float cardSpacing = 0.5f;        // Space between cards
     public int totalCards;         // Initial number of cards
+    public GameObject canvasObj;
+    public GameObject drawPile;
+    public TextMeshProUGUI textComponent;
 
     public int playedCardsNum;
     public bool yourTurn = true;
@@ -189,6 +193,15 @@ public class CardManager : MonoBehaviour
         newCard.transform.localRotation = Quaternion.identity;
     }
 
+    void Update()
+    {
+        if(totalCards == 0)
+        {
+            textComponent.text = "You Have Won The Game";
+            drawPile.SetActive(false);
+            canvasObj.SetActive(true);
+        }
+    }
 
     public void UpdateCardPositions()
     {
