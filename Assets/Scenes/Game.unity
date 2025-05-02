@@ -524,6 +524,9 @@ MonoBehaviour:
   - {fileID: -1967143162, guid: 51cd2fa87d72e704eb983c8938914a0f, type: 3}
   cardSpacing: 1
   totalCards: 0
+  canvasObj: {fileID: 1357065878}
+  drawPile: {fileID: 1955575186}
+  textComponent: {fileID: 578602228}
   playedCardsNum: 0
   yourTurn: 1
   reversed: 0
