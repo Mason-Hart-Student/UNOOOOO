@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using TMPro;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class AiOneCards : MonoBehaviour
@@ -10,9 +10,9 @@ public class AiOneCards : MonoBehaviour
     public Sprite[] cardBack;
     public float cardSpacing = 0.5f; // Space between the cards
     public int totalCards;
-    public TextMeshProUGUI textComponent;
+    public Text textComponent;
     public GameObject canvasObj;
-    public TextMeshProUGUI aiName;
+    public Text aiName;
 
     public bool aiOne = false;  // AI turn control (Set to true when it's the AI's turn)
     public bool hasPlayedCard;
@@ -39,6 +39,7 @@ public class AiOneCards : MonoBehaviour
         drawCard = FindObjectOfType<DrawCard>();
         aiTwoCards = FindObjectOfType<AiTwoCards>();
         aiThreeCards = FindObjectOfType<AiThreeCards>();
+        
         UpdateCardPositions();
 
         // Create some cards for AI at the start
@@ -50,12 +51,11 @@ public class AiOneCards : MonoBehaviour
 
     void LateUpdate()
     {
+        UpdateTextColor();
         if (aiOne && !hasPlayedCard)
         {
             TryPlayCard();
         }
-        // PlayCardIfPossibleAiTwo();
-        // PlayCardIfPossibleAiThree();
     }
 
     public void DrawFour()
@@ -191,15 +191,14 @@ public class AiOneCards : MonoBehaviour
             playedCards.SetActive(false);
         }
         UpdateCardPositions();
-
-        if (!cardManager.reversed) 
-        {
-            aiTwoCards.hasPlayedCard = false;
-            aiTwoCards.aiTwo = true;
-        }
-        else if(cardManager.reversed)
+        if(cardManager.reversed)
         {
             cardManager.yourTurn = true;
+        }
+        else
+        {
+            aiTwoCards.aiTwo = true;
+            aiTwoCards.hasPlayedCard = false;
         }
 
         aiOne = false;
@@ -269,5 +268,10 @@ public class AiOneCards : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene("Start");
+    }
+    void UpdateTextColor()
+    {
+        Color darkGreen = new Color(0, 0.7f, 0);
+        textComponent.color = aiOne ? darkGreen : Color.black;
     }
 }

@@ -8,12 +8,14 @@ public class DrawCard : MonoBehaviour
 
     public GameObject playedCards;
     AiOneCards aiCards;
+    AiThreeCards aiThreeCards;
 
     void Start()
     {
         // Find the CardManager in the scene
         cardManager = FindObjectOfType<CardManager>();
         aiCards = FindObjectOfType<AiOneCards>();
+        aiThreeCards = FindObjectOfType<AiThreeCards>();
 
         playedCards = GameObject.Find("PlayedCards");
 
@@ -54,9 +56,17 @@ public class DrawCard : MonoBehaviour
         if(cardManager.yourTurn)
         {
             cardManager.AddCard();
+            cardManager.yourTurn = false;
+        }
+        if(cardManager.reversed)
+        {
+            aiThreeCards.aiThree = true;
+            aiThreeCards.hasPlayedCard = false;
+        }
+        else
+        { 
             aiCards.hasPlayedCard = false;
             aiCards.aiOne = true;
-            cardManager.yourTurn = false;
         }
     }
 
