@@ -13,6 +13,7 @@ public class AiTwoCards : MonoBehaviour
     public Text textComponent;
     public GameObject canvasObj;
     public Text aiName;
+    public RotateArrow rotateArrow;
 
     public bool aiTwo = false;  // AI turn control (Set to true when it's the AI's turn)
     public bool hasPlayedCard = true;
@@ -40,6 +41,7 @@ public class AiTwoCards : MonoBehaviour
         drawCard = FindObjectOfType<DrawCard>();
         aiOneCards = FindObjectOfType<AiOneCards>();
         aiThreeCards = FindObjectOfType<AiThreeCards>();
+        rotateArrow = FindObjectOfType<RotateArrow>();
         
         UpdateCardPositions();
 
@@ -206,6 +208,7 @@ public class AiTwoCards : MonoBehaviour
             aiThreeCards.hasPlayedCard = false;
             hasPlayedCard = true;
         }
+        rotateArrow.Rotate();
     }
 
 
@@ -267,6 +270,6 @@ public class AiTwoCards : MonoBehaviour
     void UpdateTextColor()
     {
         Color darkGreen = new Color(0, 0.7f, 0);
-        textComponent.color = aiTwo ? darkGreen : Color.black;
+        aiName.color = aiTwo ? darkGreen : Color.black;
     }
 }

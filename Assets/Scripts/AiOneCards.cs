@@ -13,6 +13,7 @@ public class AiOneCards : MonoBehaviour
     public Text textComponent;
     public GameObject canvasObj;
     public Text aiName;
+    public RotateArrow rotateArrow;
 
     public bool aiOne = false;  // AI turn control (Set to true when it's the AI's turn)
     public bool hasPlayedCard;
@@ -39,6 +40,7 @@ public class AiOneCards : MonoBehaviour
         drawCard = FindObjectOfType<DrawCard>();
         aiTwoCards = FindObjectOfType<AiTwoCards>();
         aiThreeCards = FindObjectOfType<AiThreeCards>();
+        rotateArrow = FindObjectOfType<RotateArrow>();
         
         UpdateCardPositions();
 
@@ -182,7 +184,7 @@ public class AiOneCards : MonoBehaviour
 
     if (cardPlayed)
     {
-        if(totalCards == 0)
+        if (totalCards == 0)
         {
             drawPile.SetActive(false);
             textComponent.text = aiName.text + " Has Won The Game!";
@@ -191,18 +193,18 @@ public class AiOneCards : MonoBehaviour
             playedCards.SetActive(false);
         }
         UpdateCardPositions();
-        if(cardManager.reversed)
+        if (cardManager.reversed)
         {
             cardManager.yourTurn = true;
+            aiOne = false;
+            hasPlayedCard = true;
+            yield return null;
         }
-        else
-        {
-            aiTwoCards.aiTwo = true;
-            aiTwoCards.hasPlayedCard = false;
-        }
-
+        aiTwoCards.aiTwo = true;
+        aiTwoCards.hasPlayedCard = false;
         aiOne = false;
         hasPlayedCard = true;
+        rotateArrow.Rotate();
     }
     else
     {
@@ -211,6 +213,7 @@ public class AiOneCards : MonoBehaviour
         aiTwoCards.aiTwo = true;
         aiTwoCards.hasPlayedCard = false;
         hasPlayedCard = true;
+        rotateArrow.Rotate();
     }
 }
 
@@ -272,6 +275,6 @@ public class AiOneCards : MonoBehaviour
     void UpdateTextColor()
     {
         Color darkGreen = new Color(0, 0.7f, 0);
-        textComponent.color = aiOne ? darkGreen : Color.black;
+        aiName.color = aiOne ? darkGreen : Color.black;
     }
 }

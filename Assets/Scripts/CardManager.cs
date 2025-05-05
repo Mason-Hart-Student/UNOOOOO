@@ -32,11 +32,6 @@ public class CardManager : MonoBehaviour
 
         aiCards = FindObjectOfType<AiOneCards>();
 
-        for (int i = 0; i < 1; i++)
-        {
-            AddCard();
-        }
-
         UpdateCardPositions();
 
         for(int i = 0; i < cardSprites.Length; i++)
@@ -133,6 +128,10 @@ public class CardManager : MonoBehaviour
                     break;
             }
         }
+        for (int i = 0; i < 7; i++)
+        {
+            AddCard();
+        }
     }
 
     public void AddCard()
@@ -222,6 +221,7 @@ public class CardManager : MonoBehaviour
             GameObject card = transform.GetChild(i).gameObject;
 
             float xPos = (i * cardSpacing) - (totalWidth / 2f);
+            card.GetComponent<SpriteRenderer>().sortingOrder = i;
             card.transform.localPosition = new Vector3(xPos, 0f, 0); // Set Y to match your hover logic
         }
     }

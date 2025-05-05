@@ -4,6 +4,7 @@ using TMPro;
 
 public class Card : MonoBehaviour
 {
+    public RotateArrow rotateArrow;
     private SpriteRenderer spriteRenderer;
     public GameObject playedCards;
     public int speed = 1;
@@ -27,6 +28,7 @@ public class Card : MonoBehaviour
         aiCards = FindObjectOfType<AiOneCards>();
         aiTwoCards = FindObjectOfType<AiTwoCards>();
         aiThreeCards = FindObjectOfType<AiThreeCards>();
+        rotateArrow = FindObjectOfType<RotateArrow>();
 
         playedCards = GameObject.Find("PlayedCards");
         wildCanvas = GetComponent<Canvas>();
@@ -222,6 +224,7 @@ public class Card : MonoBehaviour
                 cardManager.totalCards--;
                 drawCard.cardName = transform.name;
                 GetComponent<SpriteRenderer>().sortingOrder = cardManager.playedCardsNum;
+                rotateArrow.Rotate();
 
                 BoxCollider2D collider = GetComponent<BoxCollider2D>();
                 if (collider != null)
