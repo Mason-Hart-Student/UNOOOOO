@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using TMPro;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class AiThreeCards : MonoBehaviour
@@ -10,9 +10,10 @@ public class AiThreeCards : MonoBehaviour
     public Sprite[] cardBack;
     public float cardSpacing = 0.5f; // Space between the cards
     public int totalCards;
-    public TextMeshProUGUI textComponent;
+    public Text textComponent;
     public GameObject canvasObj;
-    public TextMeshProUGUI aiName;
+    public Text aiName;
+    public RotateArrow rotateArrow;
 
     public bool aiThree = false;  // AI turn control (Set to true when it's the AI's turn)
     public bool hasPlayedCard = true;
@@ -39,6 +40,7 @@ public class AiThreeCards : MonoBehaviour
         drawCard = FindObjectOfType<DrawCard>();
         aiOneCards = FindObjectOfType<AiOneCards>();
         aiTwoCards = FindObjectOfType<AiTwoCards>();
+        rotateArrow = FindObjectOfType<RotateArrow>();
         UpdateCardPositions();
 
         // Create some cards for AI at the start
@@ -50,12 +52,11 @@ public class AiThreeCards : MonoBehaviour
 
     void LateUpdate()
     {
+        UpdateTextColor();
         if (aiThree && !hasPlayedCard)
         {
             TryPlayCard();
         }
-        // PlayCardIfPossibleaiThree();
-        // PlayCardIfPossibleAiThree();
     }
 
     public void Erm() 
@@ -184,15 +185,15 @@ public class AiThreeCards : MonoBehaviour
                 playedCards.SetActive(false);
             }
             UpdateCardPositions();
-            if(!cardManager.reversed)
-            {
-                cardManager.yourTurn = true;
-            }
-            else
+            if(cardManager.reversed)
             {
                 aiTwoCards.aiTwo = true;
                 aiTwoCards.hasPlayedCard = false;
+                aiThree = false;
+                hasPlayedCard = false;
+                yield return null;
             }
+            cardManager.yourTurn = true;
             aiThree = false;
             hasPlayedCard = true;
         }
@@ -203,6 +204,7 @@ public class AiThreeCards : MonoBehaviour
             cardManager.yourTurn = true;
             hasPlayedCard = true;
         }
+        rotateArrow.Rotate();
     }
 
 
@@ -259,5 +261,10 @@ public class AiThreeCards : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene("Start");
+    }
+    void UpdateTextColor()
+    {
+        Color darkGreen = new Color(0, 0.7f, 0);
+        aiName.color = aiThree ? darkGreen : Color.black;
     }
 }

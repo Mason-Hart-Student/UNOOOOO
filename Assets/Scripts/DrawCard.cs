@@ -8,12 +8,16 @@ public class DrawCard : MonoBehaviour
 
     public GameObject playedCards;
     AiOneCards aiCards;
+    AiThreeCards aiThreeCards;
+    RotateArrow rotateArrow;
 
     void Start()
     {
         // Find the CardManager in the scene
         cardManager = FindObjectOfType<CardManager>();
         aiCards = FindObjectOfType<AiOneCards>();
+        aiThreeCards = FindObjectOfType<AiThreeCards>();
+        rotateArrow = FindObjectOfType<RotateArrow>();
 
         playedCards = GameObject.Find("PlayedCards");
 
@@ -54,10 +58,19 @@ public class DrawCard : MonoBehaviour
         if(cardManager.yourTurn)
         {
             cardManager.AddCard();
-            aiCards.hasPlayedCard = false;
-            aiCards.aiOne = true;
             cardManager.yourTurn = false;
         }
+        if(cardManager.reversed)
+        {
+            aiThreeCards.aiThree = true;
+            aiThreeCards.hasPlayedCard = false;
+        }
+        else
+        { 
+            aiCards.hasPlayedCard = false;
+            aiCards.aiOne = true;
+        }
+        rotateArrow.Rotate();
     }
 
     void PlaceRandomCardAtStart()

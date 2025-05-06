@@ -4,6 +4,7 @@ using TMPro;
 
 public class Card : MonoBehaviour
 {
+    public RotateArrow rotateArrow;
     private SpriteRenderer spriteRenderer;
     public GameObject playedCards;
     public int speed = 1;
@@ -27,6 +28,7 @@ public class Card : MonoBehaviour
         aiCards = FindObjectOfType<AiOneCards>();
         aiTwoCards = FindObjectOfType<AiTwoCards>();
         aiThreeCards = FindObjectOfType<AiThreeCards>();
+        rotateArrow = FindObjectOfType<RotateArrow>();
 
         playedCards = GameObject.Find("PlayedCards");
         wildCanvas = GetComponent<Canvas>();
@@ -82,8 +84,14 @@ public class Card : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (transform.name == "Wild" && cardManager.yourTurn)
         {
+            if(cardManager.totalCards == 1 && !cardManager.unoClicked)
+            {
+                cardManager.AddCard(); cardManager.AddCard();
+                return;
+            }
             cardManager.yourTurn = false;
             cardManager.playedCardsNum++;
+            cardManager.totalCards--;
             transform.SetParent(playedCards.transform);
             StartCoroutine(MoveCard(playCardPos, .5f));
             cardManager.UpdateCardPositions();
@@ -99,8 +107,14 @@ public class Card : MonoBehaviour
 
         if (transform.name == "Draw4" && cardManager.yourTurn)
         {
+            if(cardManager.totalCards == 1 && !cardManager.unoClicked)
+            {
+                cardManager.AddCard(); cardManager.AddCard();
+                return;
+            }
             cardManager.yourTurn = false;
             cardManager.playedCardsNum++;
+            cardManager.totalCards--;
             aiCards.DrawFour();
             transform.SetParent(playedCards.transform);
             StartCoroutine(MoveCard(playCardPos, .5f));
@@ -133,6 +147,21 @@ public class Card : MonoBehaviour
             // Allow play if either color or number matches
             if (transformColor == cardColor && cardManager.yourTurn || transformNumber == cardNumber && cardManager.yourTurn)
             {
+                if(cardManager.totalCards == 1 && !cardManager.unoClicked)
+                {
+                    cardManager.AddCard(); cardManager.AddCard();
+                    if(cardManager.reversed)
+                    {
+                        aiThreeCards.aiThree = true;
+                        aiThreeCards.hasPlayedCard = false;
+                    }
+                    else
+                    {
+                        aiCards.aiOne = true;
+                        aiCards.hasPlayedCard = false;
+                    }
+                    return;
+                }
                 cardManager.yourTurn = false;
 
                 switch(transformNumber)
@@ -192,8 +221,10 @@ public class Card : MonoBehaviour
                 transform.SetParent(playedCards.transform);
                 StartCoroutine(MoveCard(playCardPos, .5f));
                 cardManager.UpdateCardPositions();
+                cardManager.totalCards--;
                 drawCard.cardName = transform.name;
                 GetComponent<SpriteRenderer>().sortingOrder = cardManager.playedCardsNum;
+                rotateArrow.Rotate();
 
                 BoxCollider2D collider = GetComponent<BoxCollider2D>();
                 if (collider != null)

@@ -1,6 +1,7 @@
 using UnityEngine;
-using System.Collections.Generic;
+using System.Collections;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class CardManager : MonoBehaviour
 {
@@ -9,7 +10,9 @@ public class CardManager : MonoBehaviour
     public int totalCards;         // Initial number of cards
     public GameObject canvasObj;
     public GameObject drawPile;
+    public GameObject playedCards;
     public TextMeshProUGUI textComponent;
+    public bool unoClicked = false;
 
     public int playedCardsNum;
     public bool yourTurn = true;
@@ -28,11 +31,6 @@ public class CardManager : MonoBehaviour
         Debug.Log(cardSprites.Length);
 
         aiCards = FindObjectOfType<AiOneCards>();
-
-        for (int i = 0; i < 7; i++)
-        {
-            AddCard();
-        }
 
         UpdateCardPositions();
 
@@ -130,6 +128,10 @@ public class CardManager : MonoBehaviour
                     break;
             }
         }
+        for (int i = 0; i < 7; i++)
+        {
+            AddCard();
+        }
     }
 
     public void AddCard()
@@ -198,8 +200,14 @@ public class CardManager : MonoBehaviour
         if(totalCards == 0)
         {
             textComponent.text = "You Have Won The Game";
+            StartCoroutine(EndGame());
             drawPile.SetActive(false);
             canvasObj.SetActive(true);
+            playedCards.SetActive(false);
+        }
+        if(totalCards > 1)
+        {
+            unoClicked = false;
         }
     }
 
@@ -213,12 +221,18 @@ public class CardManager : MonoBehaviour
             GameObject card = transform.GetChild(i).gameObject;
 
             float xPos = (i * cardSpacing) - (totalWidth / 2f);
+            card.GetComponent<SpriteRenderer>().sortingOrder = i;
             card.transform.localPosition = new Vector3(xPos, 0f, 0); // Set Y to match your hover logic
         }
     }
 
-    public void PlaySound()
+    public void UnoClicked()
     {
-        audio.Play();
+        unoClicked = true;
+    }
+    private IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene("Start");
     }
 }
