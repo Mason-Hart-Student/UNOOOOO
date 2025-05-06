@@ -53,7 +53,7 @@ public class DrawCard : MonoBehaviour
         }
     }
 
-    void OnMouseUpAsButton()
+    public void OnMouseUpAsButton()
     {
         if(cardManager.yourTurn)
         {

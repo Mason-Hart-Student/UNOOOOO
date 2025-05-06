@@ -36,7 +36,6 @@ public class Card : MonoBehaviour
 
     void Update()
     {
-        // string[] cards = new string[];
     }
 
     // Called when the card is initialized

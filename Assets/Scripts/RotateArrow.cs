@@ -7,11 +7,17 @@ public class RotateArrow : MonoBehaviour
     private CardManager cardManager;
     private bool previousReversed;
     private bool isRotating = false;
+    AiOneCards aiOneCards;
+    AiTwoCards aiTwoCards;
+    AiThreeCards aiThreeCards;
 
     void Start()
     {
         cardManager = FindObjectOfType<CardManager>();
         previousReversed = cardManager.reversed;
+        aiOneCards = FindObjectOfType<AiOneCards>();
+        aiTwoCards = FindObjectOfType<AiTwoCards>();
+        aiThreeCards = FindObjectOfType<AiThreeCards>();
     }
 
     void Update()
@@ -27,7 +33,23 @@ public class RotateArrow : MonoBehaviour
     {
         isRotating = true;
         float startRotation = transform.localEulerAngles.z;
-        float targetRotation = cardManager.reversed ? startRotation - 90 : startRotation + 90;
+        float targetRotation = 90f;
+        if(aiThreeCards.aiThree)
+        {
+            targetRotation = -90f;
+        }
+        if(aiTwoCards.aiTwo)
+        {
+            targetRotation = 180f;
+        }
+        if(aiOneCards.aiOne)
+        {
+            targetRotation = 90f;
+        }
+        if(cardManager.yourTurn)
+        {
+            targetRotation = 0f;
+        }
         float timeElapsed = 0;
         while (timeElapsed < 0.5f)
         {
