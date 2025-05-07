@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CardManager : MonoBehaviour
 {
@@ -146,7 +147,7 @@ public class CardManager : MonoBehaviour
             return;
         }
 
-        int randomIndex = Random.Range(0, cardSprites.Length);
+        int randomIndex = UnityEngine.Random.Range(0, cardSprites.Length);
         Sprite selectedSprite = cardSprites[randomIndex];
 
         GameObject newCard = new GameObject(selectedSprite.name);
@@ -177,20 +178,36 @@ public class CardManager : MonoBehaviour
         {
             unoClicked = false;
         }
-        if(Input.GetKeyDown(keybind.buttonTextTwo.text.ToLower()) || Input.GetKeyDown("left"))
+        if (
+            TryParseKey(keybind.buttonTextTwo.text, out KeyCode keyLeft)
+                && Input.GetKeyDown(keyLeft)
+            || Input.GetKeyDown(KeyCode.LeftArrow)
+        )
         {
             cardSelected--;
         }
-        if(Input.GetKeyDown(keybind.buttonTextOne.text.ToLower()) || Input.GetKeyDown("right"))
+
+        if (
+            TryParseKey(keybind.buttonTextOne.text, out KeyCode keyRight)
+                && Input.GetKeyDown(keyRight)
+            || Input.GetKeyDown(KeyCode.RightArrow)
+        )
         {
             cardSelected++;
         }
-        if (Input.GetKeyDown(keybind.buttonTextFour.text.ToLower()))
+
+        if (
+            TryParseKey(keybind.buttonTextFour.text, out KeyCode keyDraw)
+            && Input.GetKeyDown(keyDraw)
+        )
         {
             drawCard.OnMouseUpAsButton();
         }
 
-        if (Input.GetKeyDown(keybind.buttonTextThree.text.ToLower()))
+        if (
+            TryParseKey(keybind.buttonTextThree.text, out KeyCode keyPlay)
+            && Input.GetKeyDown(keyPlay)
+        )
         {
             if (cardSelected >= transform.childCount)
             {
@@ -202,6 +219,7 @@ public class CardManager : MonoBehaviour
                 card.GetComponent<Card>().OnMouseUpAsButton();
             }
         }
+
         for (int i = 0; i < transform.childCount; i++)
         {
             GameObject card = transform.GetChild(i).gameObject;
@@ -216,6 +234,22 @@ public class CardManager : MonoBehaviour
             }
             card.transform.position = pos;
         }
+    }
+
+    private bool TryParseKey(string input, out KeyCode key)
+    {
+        key = KeyCode.None;
+
+        if (string.IsNullOrWhiteSpace(input))
+            return false;
+
+        // Handle single-digit numbers by converting to AlphaN
+        if (input.Length == 1 && char.IsDigit(input[0]))
+        {
+            input = "Alpha" + input;
+        }
+
+        return Enum.TryParse(input, true, out key);
     }
 
     public void UpdateCardPositions()
@@ -244,4 +278,3 @@ public class CardManager : MonoBehaviour
         SceneManager.LoadScene("Start");
     }
 }
-

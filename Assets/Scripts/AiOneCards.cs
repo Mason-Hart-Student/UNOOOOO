@@ -1,7 +1,7 @@
-using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class AiOneCards : MonoBehaviour
 {
@@ -15,9 +15,117 @@ public class AiOneCards : MonoBehaviour
     public Text aiName;
     public RotateArrow rotateArrow;
 
-    public bool aiOne = false;  // AI turn control (Set to true when it's the AI's turn)
+    public bool aiOne = false; // AI turn control (Set to true when it's the AI's turn)
     public bool hasPlayedCard;
-    private string[] aiNames = new string[] {"Andrew", "Anthony", "Brian", "Charles", "Christopher", "Daniel", "David", "Donald", "Edward", "George", "James", "Jason", "Jeffery", "John", "Joseph", "Joshua", "Kenneth", "Kevin", "Mark", "Matthew", "Michael", "Paul", "Richard", "Robert", "Ronald", "Ryan", "Steven", "Thomas", "Timothy", "William"};
+    private string[] aiNames = new string[]
+    {
+        "Andrew",
+        "Anthony",
+        "Brian",
+        "Charles",
+        "Christopher",
+        "Daniel",
+        "David",
+        "Donald",
+        "Edward",
+        "George",
+        "James",
+        "Jason",
+        "Jeffery",
+        "John",
+        "Joseph",
+        "Joshua",
+        "Kenneth",
+        "Kevin",
+        "Mark",
+        "Matthew",
+        "Michael",
+        "Paul",
+        "Richard",
+        "Robert",
+        "Ronald",
+        "Ryan",
+        "Steven",
+        "Thomas",
+        "Timothy",
+        "William",
+        // Additional 75 names
+        "Aaron",
+        "Adam",
+        "Alan",
+        "Albert",
+        "Alex",
+        "Alexander",
+        "Allen",
+        "Arthur",
+        "Austin",
+        "Barry",
+        "Benjamin",
+        "Billy",
+        "Blake",
+        "Bradley",
+        "Brandon",
+        "Brent",
+        "Bruce",
+        "Bryan",
+        "Caleb",
+        "Carl",
+        "Carter",
+        "Chad",
+        "Clarence",
+        "Clifford",
+        "Clyde",
+        "Connor",
+        "Craig",
+        "Curtis",
+        "Dale",
+        "Darren",
+        "Dean",
+        "Dennis",
+        "Derek",
+        "Dominic",
+        "Douglas",
+        "Dustin",
+        "Earl",
+        "Eddie",
+        "Eli",
+        "Ethan",
+        "Eugene",
+        "Francis",
+        "Frank",
+        "Fred",
+        "Gabriel",
+        "Garry",
+        "Gavin",
+        "Gerald",
+        "Glenn",
+        "Gordon",
+        "Grant",
+        "Greg",
+        "Harold",
+        "Harry",
+        "Henry",
+        "Howard",
+        "Ian",
+        "Isaac",
+        "Jack",
+        "Jacob",
+        "Jake",
+        "Jared",
+        "Jeremiah",
+        "Jeremy",
+        "Jerry",
+        "Jesse",
+        "Joel",
+        "Jon",
+        "Jonathan",
+        "Jordan",
+        "Justin",
+        "Keith",
+        "Kyle",
+        "Lawrence",
+        "Lee",
+    };
 
     CardManager cardManager;
     DrawCard drawCard;
@@ -31,7 +139,6 @@ public class AiOneCards : MonoBehaviour
     public GameObject playedCards;
     private string topCard;
 
-
     void Start()
     {
         int randomIndex = Random.Range(0, aiNames.Length);
@@ -41,7 +148,7 @@ public class AiOneCards : MonoBehaviour
         aiTwoCards = FindObjectOfType<AiTwoCards>();
         aiThreeCards = FindObjectOfType<AiThreeCards>();
         rotateArrow = FindObjectOfType<RotateArrow>();
-        
+
         UpdateCardPositions();
 
         // Create some cards for AI at the start
@@ -68,7 +175,7 @@ public class AiOneCards : MonoBehaviour
         AddCard();
     }
 
-    public void Erm() 
+    public void Erm()
     {
         hasPlayedCard = false;
         aiOne = true;
@@ -79,7 +186,8 @@ public class AiOneCards : MonoBehaviour
         aiOne = false;
         if (totalCards > 10)
         {
-            cardSpacing -= .5f;;
+            cardSpacing -= .5f;
+            ;
         }
 
         if (cardSpacing < 0.3f)
@@ -125,15 +233,16 @@ public class AiOneCards : MonoBehaviour
     void UpdateCardPositions()
     {
         // Check if there are any cards to position
-        if (transform.childCount == 0) return;
+        if (transform.childCount == 0)
+            return;
 
         totalWidth = (totalCards - 1) * cardSpacing;
 
-
         for (int i = 0; i < totalCards; i++)
         {
-            if (i >= transform.childCount) break; // Avoid accessing out-of-bounds
-            
+            if (i >= transform.childCount)
+                break; // Avoid accessing out-of-bounds
+
             GameObject card = transform.GetChild(i).gameObject;
             float xPos = (i * cardSpacing) - (totalWidth / 2);
             card.transform.localPosition = new Vector3(xPos, 0, 0);
@@ -144,86 +253,91 @@ public class AiOneCards : MonoBehaviour
     {
         StartCoroutine(PlayCardIfPossible());
     }
+
     private IEnumerator PlayCardIfPossible()
-{
-    yield return new WaitForSeconds(1f); // Delay before AI plays (1 second)
-
-    if (!aiOne || hasPlayedCard) yield break;
-    if (cardManager == null) yield break;
-    if (transform.childCount == 0) yield break;
-
-    bool cardPlayed = false;
-    string topCardName = drawCard.cardName;
-
-    for (int i = 0; i < transform.childCount; i++)
     {
-        GameObject card = transform.GetChild(i).gameObject;
-        string cardName = card.name;
-        SpriteRenderer spriteRenderer = card.GetComponent<SpriteRenderer>();
+        yield return new WaitForSeconds(1f); // Delay before AI plays (1 second)
 
-        if (cardName == "Wild" || cardName == "Draw4")
+        if (!aiOne || hasPlayedCard)
+            yield break;
+        if (cardManager == null)
+            yield break;
+        if (transform.childCount == 0)
+            yield break;
+
+        bool cardPlayed = false;
+        string topCardName = drawCard.cardName;
+
+        for (int i = 0; i < transform.childCount; i++)
         {
-            PlayCard(card, spriteRenderer, true);
-            cardPlayed = true;
-            break;
-        }
+            GameObject card = transform.GetChild(i).gameObject;
+            string cardName = card.name;
+            SpriteRenderer spriteRenderer = card.GetComponent<SpriteRenderer>();
 
-        string[] cardParts = cardName.Split('_');
-        string[] topCardParts = topCardName.Split('_');
-
-        if (cardParts.Length >= 2 && topCardParts.Length >= 2)
-        {
-            if (cardParts[0] == topCardParts[0] || cardParts[1] == topCardParts[1])
+            if (cardName == "Wild" || cardName == "Draw4")
             {
-                PlayCard(card, spriteRenderer);
+                PlayCard(card, spriteRenderer, true);
                 cardPlayed = true;
                 break;
             }
-        }
-    }
 
-    if (cardPlayed)
-    {
-        if (totalCards == 0)
-        {
-            drawPile.SetActive(false);
-            textComponent.text = aiName.text + " Has Won The Game!";
-            StartCoroutine(EndGame());
-            canvasObj.SetActive(true);
-            playedCards.SetActive(false);
+            string[] cardParts = cardName.Split('_');
+            string[] topCardParts = topCardName.Split('_');
+
+            if (cardParts.Length >= 2 && topCardParts.Length >= 2)
+            {
+                if (cardParts[0] == topCardParts[0] || cardParts[1] == topCardParts[1])
+                {
+                    PlayCard(card, spriteRenderer);
+                    cardPlayed = true;
+                    break;
+                }
+            }
         }
-        UpdateCardPositions();
-        if (cardManager.reversed)
+
+        if (cardPlayed)
         {
-            cardManager.yourTurn = true;
+            if (totalCards == 0)
+            {
+                drawPile.SetActive(false);
+                textComponent.text = aiName.text + " Has Won The Game!";
+                StartCoroutine(EndGame());
+                canvasObj.SetActive(true);
+                playedCards.SetActive(false);
+            }
+            UpdateCardPositions();
+            if (cardManager.reversed)
+            {
+                cardManager.yourTurn = true;
+                aiOne = false;
+                hasPlayedCard = true;
+                yield return null;
+            }
+            aiTwoCards.aiTwo = true;
+            aiTwoCards.hasPlayedCard = false;
             aiOne = false;
             hasPlayedCard = true;
-            yield return null;
+            rotateArrow.Rotate();
         }
-        aiTwoCards.aiTwo = true;
-        aiTwoCards.hasPlayedCard = false;
-        aiOne = false;
-        hasPlayedCard = true;
-        rotateArrow.Rotate();
+        else
+        {
+            AddCard();
+            aiOne = false;
+            aiTwoCards.aiTwo = true;
+            aiTwoCards.hasPlayedCard = false;
+            hasPlayedCard = true;
+            rotateArrow.Rotate();
+        }
     }
-    else
-    {
-        AddCard();
-        aiOne = false;
-        aiTwoCards.aiTwo = true;
-        aiTwoCards.hasPlayedCard = false;
-        hasPlayedCard = true;
-        rotateArrow.Rotate();
-    }
-}
-
 
     private void PlayCard(GameObject card, SpriteRenderer spriteRenderer, bool isSpecial = false)
     {
         cardManager.playedCardsNum++;
         card.transform.SetParent(playedCards.transform);
         card.transform.position = playCardPos;
-        card.transform.rotation = isSpecial ? Quaternion.Euler(0, 0, -90) : Quaternion.Euler(0, 0, 0);
+        card.transform.rotation = isSpecial
+            ? Quaternion.Euler(0, 0, -90)
+            : Quaternion.Euler(0, 0, 0);
         drawCard.cardName = card.name;
         spriteRenderer.sortingOrder = cardManager.playedCardsNum;
 
@@ -234,7 +348,6 @@ public class AiOneCards : MonoBehaviour
             spriteRenderer.sprite = newSprite; // Set the sprite to the matched one
         }
         card.transform.localScale = Vector3.one;
-
 
         totalCards--;
 
@@ -251,9 +364,10 @@ public class AiOneCards : MonoBehaviour
     {
         // Extract the color and number from the card name
         string[] cardParts = cardName.Split('_');
-        if (cardParts.Length < 2) return null;
+        if (cardParts.Length < 2)
+            return null;
 
-        string color = cardParts[0];  // The color part (red, blue, green, yellow)
+        string color = cardParts[0]; // The color part (red, blue, green, yellow)
         string number = cardParts[1]; // The number part (0-9)
 
         // Loop through the cardSprites array to find the matching sprite
@@ -267,11 +381,13 @@ public class AiOneCards : MonoBehaviour
 
         return null; // Return null if no matching sprite was found
     }
+
     private IEnumerator EndGame()
     {
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene("Start");
     }
+
     void UpdateTextColor()
     {
         Color darkGreen = new Color(0, 0.7f, 0);
