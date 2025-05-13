@@ -9,8 +9,8 @@ showPackageIndexes = false
 showStatusBar = false
 scopes = {
 	"picker_window_position_offset.0B486DF2" = "126;349;320;550"
-	"picker_search_text.0B486DF2" = ""
-	"last_search.0B486DF2" = ""
+	"picker_search_text.0B486DF2" = "se"
+	"last_search.0B486DF2" = "se"
 	"OpenInspectorPreview.0B486DF2" = "0"
 	"currentGroup.0B486DF2" = null
 }
