@@ -297,14 +297,7 @@ public class AiThreeCards : MonoBehaviour
                 playedCards.SetActive(false);
             }
             UpdateCardPositions();
-            if (cardManager.reversed)
-            {
-                aiTwoCards.aiTwo = true;
-                aiTwoCards.hasPlayedCard = false;
-                aiThree = false;
-                hasPlayedCard = false;
-                yield return null;
-            }
+            drawCard.hasDrawn = false;
             cardManager.yourTurn = true;
             aiThree = false;
             hasPlayedCard = true;

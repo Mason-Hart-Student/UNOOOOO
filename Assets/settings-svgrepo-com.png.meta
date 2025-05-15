@@ -164,7 +164,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      settings-svgrepo-com_0: -2878996419069604430
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -3,6 +3,7 @@ using UnityEngine;
 public class DrawCard : MonoBehaviour
 {
     public CardManager cardManager;
+    public bool hasDrawn = false;
 
     public string cardName;
 
@@ -21,7 +22,6 @@ public class DrawCard : MonoBehaviour
 
         playedCards = GameObject.Find("PlayedCards");
 
-
         if (cardManager == null)
         {
             Debug.LogError("CardManager not found in the scene!");
@@ -35,19 +35,19 @@ public class DrawCard : MonoBehaviour
 
     void Update()
     {
-        if(cardName.StartsWith("red"))
+        if (cardName.StartsWith("red"))
         {
             Camera.main.backgroundColor = new Color(1f, 0.6f, 0.6f);
         }
-        if(cardName.StartsWith("blue"))
+        if (cardName.StartsWith("blue"))
         {
             Camera.main.backgroundColor = new Color(0.6f, 0.8f, 1f);
         }
-        if(cardName.StartsWith("yellow"))
+        if (cardName.StartsWith("yellow"))
         {
             Camera.main.backgroundColor = new Color(1f, 1f, 0.6f);
         }
-        if(cardName.StartsWith("green"))
+        if (cardName.StartsWith("green"))
         {
             Camera.main.backgroundColor = new Color(0.6f, 1f, 0.6f);
         }
@@ -55,22 +55,25 @@ public class DrawCard : MonoBehaviour
 
     public void OnMouseUpAsButton()
     {
-        if(cardManager.yourTurn)
+        if (cardManager.yourTurn && !hasDrawn)
         {
-            cardManager.AddCard();
+            hasDrawn = true; // Prevent further clicks this turn
             cardManager.yourTurn = false;
+            cardManager.AddCard();
+
+            if (cardManager.reversed)
+            {
+                aiThreeCards.aiThree = true;
+                aiThreeCards.hasPlayedCard = false;
+            }
+            else
+            {
+                aiCards.hasPlayedCard = false;
+                aiCards.aiOne = true;
+            }
+
+            rotateArrow.Rotate();
         }
-        if(cardManager.reversed)
-        {
-            aiThreeCards.aiThree = true;
-            aiThreeCards.hasPlayedCard = false;
-        }
-        else
-        { 
-            aiCards.hasPlayedCard = false;
-            aiCards.aiOne = true;
-        }
-        rotateArrow.Rotate();
     }
 
     void PlaceRandomCardAtStart()

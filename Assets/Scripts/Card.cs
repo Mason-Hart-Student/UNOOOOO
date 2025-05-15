@@ -1,6 +1,6 @@
-using UnityEngine;
 using System.Collections;
 using TMPro;
+using UnityEngine;
 
 public class Card : MonoBehaviour
 {
@@ -34,9 +34,7 @@ public class Card : MonoBehaviour
         wildCanvas = GetComponent<Canvas>();
     }
 
-    void Update()
-    {
-    }
+    void Update() { }
 
     // Called when the card is initialized
     public void Initialize(SpriteRenderer renderer)
@@ -54,7 +52,7 @@ public class Card : MonoBehaviour
     void OnMouseExit()
     {
         Vector3 pos = transform.position;
-        if(pos != playCardPos)
+        if (pos != playCardPos)
         {
             pos.y = -3.5f;
         }
@@ -72,20 +70,20 @@ public class Card : MonoBehaviour
             float t = Mathf.Clamp01(elapsed / duration);
             transform.position = Vector2.Lerp(start, target, t);
             yield return null;
-        
         }
 
-    transform.position = target; // ensure it ends exactly at the target
-}
+        transform.position = target; // ensure it ends exactly at the target
+    }
 
     public void OnMouseUpAsButton()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (transform.name == "Wild" && cardManager.yourTurn)
         {
-            if(cardManager.totalCards == 1 && !cardManager.unoClicked)
+            if (cardManager.totalCards == 1 && !cardManager.unoClicked)
             {
-                cardManager.AddCard(); cardManager.AddCard();
+                cardManager.AddCard();
+                cardManager.AddCard();
                 return;
             }
             cardManager.yourTurn = false;
@@ -106,9 +104,10 @@ public class Card : MonoBehaviour
 
         if (transform.name == "Draw4" && cardManager.yourTurn)
         {
-            if(cardManager.totalCards == 1 && !cardManager.unoClicked)
+            if (cardManager.totalCards == 1 && !cardManager.unoClicked)
             {
-                cardManager.AddCard(); cardManager.AddCard();
+                cardManager.AddCard();
+                cardManager.AddCard();
                 return;
             }
             cardManager.yourTurn = false;
@@ -120,7 +119,6 @@ public class Card : MonoBehaviour
             cardManager.UpdateCardPositions();
             drawCard.cardName = transform.name;
             GetComponent<SpriteRenderer>().sortingOrder = cardManager.playedCardsNum;
-
 
             BoxCollider2D collider = GetComponent<BoxCollider2D>();
             if (collider != null)
@@ -141,15 +139,17 @@ public class Card : MonoBehaviour
             string cardColor = cardNameParts[0];
             string cardNumber = cardNameParts[1];
 
-
-
             // Allow play if either color or number matches
-            if (transformColor == cardColor && cardManager.yourTurn || transformNumber == cardNumber && cardManager.yourTurn)
+            if (
+                transformColor == cardColor && cardManager.yourTurn
+                || transformNumber == cardNumber && cardManager.yourTurn
+            )
             {
-                if(cardManager.totalCards == 1 && !cardManager.unoClicked)
+                if (cardManager.totalCards == 1 && !cardManager.unoClicked)
                 {
-                    cardManager.AddCard(); cardManager.AddCard();
-                    if(cardManager.reversed)
+                    cardManager.AddCard();
+                    cardManager.AddCard();
+                    if (cardManager.reversed)
                     {
                         aiThreeCards.aiThree = true;
                         aiThreeCards.hasPlayedCard = false;
@@ -163,10 +163,10 @@ public class Card : MonoBehaviour
                 }
                 cardManager.yourTurn = false;
 
-                switch(transformNumber)
+                switch (transformNumber)
                 {
                     case "draw2":
-                        if(cardManager.reversed)
+                        if (cardManager.reversed)
                         {
                             aiThreeCards.AddCard();
                             aiThreeCards.AddCard();
@@ -188,7 +188,7 @@ public class Card : MonoBehaviour
                         break;
 
                     case "reverse":
-                        if(cardManager.reversed)
+                        if (cardManager.reversed)
                         {
                             cardManager.reversed = false;
                             aiCards.hasPlayedCard = false;
@@ -202,7 +202,7 @@ public class Card : MonoBehaviour
                         }
                         break;
                     default:
-                        if(!cardManager.reversed)
+                        if (!cardManager.reversed)
                         {
                             aiCards.aiOne = true;
                             aiCards.hasPlayedCard = false;
@@ -215,7 +215,6 @@ public class Card : MonoBehaviour
                         break;
                 }
 
-                
                 cardManager.playedCardsNum++;
                 transform.SetParent(playedCards.transform);
                 StartCoroutine(MoveCard(playCardPos, .5f));
