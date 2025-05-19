@@ -47,8 +47,9 @@ public class Card : MonoBehaviour
         Vector3 pos = transform.position;
         pos.y = -2.5f;
         transform.position = pos;
+        cardManager.cardSelected = transform.GetSiblingIndex();
     }
-
+    
     void OnMouseExit()
     {
         Vector3 pos = transform.position;
@@ -57,6 +58,7 @@ public class Card : MonoBehaviour
             pos.y = -3.5f;
         }
         transform.position = pos;
+        cardManager.cardSelected = -1;
     }
 
     public IEnumerator MoveCard(Vector2 target, float duration)
